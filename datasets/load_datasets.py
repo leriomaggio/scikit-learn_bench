@@ -21,7 +21,6 @@ import sys
 import json
 from pathlib import Path
 from typing import Callable, Dict
-from typing import MutableSet as Set
 
 from .loader_classification import (
     a_nine_a,
@@ -157,11 +156,11 @@ def try_load_dataset(dataset_name: str, output_directory: Path) -> bool:
         return False
 
 
-def extract_dataset_names(config_file: str) -> Set[str]:
+def extract_dataset_names(config_file: str) -> set[str]:
     with open(config_file) as json_config_file:
         experiment = json.load(json_config_file)
 
-        if not "cases" in experiment:
+        if "cases" not in experiment:
             return set()
 
         datasets = list()
@@ -177,7 +176,8 @@ def extract_dataset_names(config_file: str) -> Set[str]:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Utility to download selected publicly available datasets included in the benchmark."
+        description="Utility to download selected publicly available datasets "
+        "included in the benchmark."
     )
     parser.add_argument(
         "-l",
@@ -214,7 +214,7 @@ if __name__ == "__main__":
     else:
         if args.configs:
             print(f"Dataset name(s) to download will be gathered from : {args.configs}")
-            ds_names = set()
+            ds_names: set[str] = set()
             for config_file in args.configs:
                 ds_names = ds_names.union(extract_dataset_names(config_file))
         else:
